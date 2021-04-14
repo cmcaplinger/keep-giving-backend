@@ -1,17 +1,22 @@
 const express = require("express");
 const app = express();
 const path = require('path');
+const PORT = process.env.PORT || 4242
+const STATIC_DIR = `${__dirname}/client`
 
 // Copy the .env.example in the root into a .env file in this folder
+if (process.env.NODE_ENV != "production") {
+
 const envFilePath = path.resolve(__dirname, './.env');
 const env = require("dotenv").config({ path: envFilePath });
+
 if (env.error) {
   throw new Error(`Unable to load the .env file from ${envFilePath}. Please copy .env.example to ${envFilePath}`);
 }
-
+}
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-app.use(express.static(process.env.STATIC_DIR));
+app.use(express.static(STATIC_DIR));
 app.use(
   express.json({
     // We need the raw body to verify webhook signatures.
@@ -25,7 +30,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  const filePath = path.resolve(process.env.STATIC_DIR);
+  const filePath = path.resolve(STATIC_DIR);
   res.sendFile(filePath);
 });
 
@@ -139,4 +144,4 @@ app.post("/webhook", async (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(4242, () => console.log(`Node server listening at http://localhost:${4242}/`));
+app.listen(PORT, () => console.log(`Node server listening at http://localhost:${PORT}/`));
