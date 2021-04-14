@@ -1,6 +1,6 @@
 {
   "name": "stripe-sample-checkout-single-subscription",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Subscription page with Checkout",
   "main": "server.js",
   "scripts": {
