@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require('path');
 const PORT = process.env.PORT || 4242
+const STATIC_DIR = `${__dirname}/client`
 
 // Copy the .env.example in the root into a .env file in this folder
 if (process.env.NODE_ENV != "production") {
@@ -15,7 +16,7 @@ if (env.error) {
 }
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-app.use(express.static(process.env.STATIC_DIR));
+app.use(express.static(STATIC_DIR));
 app.use(
   express.json({
     // We need the raw body to verify webhook signatures.
@@ -29,7 +30,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  const filePath = path.resolve(process.env.STATIC_DIR);
+  const filePath = path.resolve(STATIC_DIR);
   res.sendFile(filePath);
 });
 
